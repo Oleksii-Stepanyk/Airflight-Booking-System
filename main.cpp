@@ -1,7 +1,10 @@
 #include <iostream>
+#include "Classes/AirlineSystemManager.h"
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+    AirlineSystemManager manager;
+    manager.run();
     return 0;
 }
