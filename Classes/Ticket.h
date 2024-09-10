@@ -2,12 +2,16 @@
 #include <string>
 using namespace std;
 
-class Ticket {
-    string id;
-    string username;
-    string seat;
-    int price;
+class Ticket
+{
+    const string id;
+    const string username;
+    const string seat;
+    const string price;
     string bookingStatus;
+
 public:
-    Ticket(string, string, string, int, string);
+    Ticket(const string&, const string&, const string&, const string&, const string&);
+    string getSeat();
+    void changeStatus(const string&);
 };
