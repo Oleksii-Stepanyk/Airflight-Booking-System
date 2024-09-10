@@ -58,24 +58,29 @@ void AirlineSystemManager::parseCommand(const string& command)
     {
         bookTicket(args[1], args[2], args[3], args[4]);
     }
-    // else if (action == "return" && args.size() == 2)
-    // {
-    //     returnTicket(args[1]);
-    // }
-    // else if (action == "view" && args.size() >= 3) {
-    //     if (const string& type = args[1]; type == "ticket" && args.size() == 3) {
-    //         viewTicket(args[2]);
-    //     }
-    //     else if (type == "user" && args.size() == 3) {
-    //         viewUser(args[2]);
-    //     }
-    //     else if (type == "flight" && args.size() == 4) {
-    //         viewFlight(args[2], args[3]);
-    //     }
-    //     else {
-    //         cout << "Invalid command!" << endl;
-    //     }
-    // }
+    else if (action == "return" && args.size() == 2)
+    {
+        returnTicket(args[1]);
+    }
+    else if (action == "view" && args.size() >= 3)
+    {
+        if (const string& type = args[1]; type == "ticket" && args.size() == 3)
+        {
+            viewTicket(args[2]);
+        }
+        else if (type == "user" && args.size() == 3)
+        {
+            viewUser(args[2]);
+        }
+        else if (type == "flight" && args.size() == 4)
+        {
+            viewFlight(args[2], args[3]);
+        }
+        else
+        {
+            cout << "Invalid command!" << endl;
+        }
+    }
     else
     {
         cout << "Invalid command!" << endl;
@@ -110,22 +115,78 @@ void AirlineSystemManager::bookTicket(const string& date, const string& flightNo
         string ticketID = to_string(lastTicketID + 1);
         lastTicketID++;
         string price = to_string(flight.getPrice(stoi(row))) + "$";
-        Ticket ticket(ticketID, username, place, price, "booked");
+        Ticket ticket(ticketID, username, flightNo, date, place, price, "booked");
         flight.addTicket(ticket);
         cout << "Ticket added with ID " << ticketID << endl;
-        if (!allBookedTickets.contains(username))
+        if (!allTicketsByUser.contains(username))
         {
             vector<Ticket> userTickets;
             userTickets.push_back(ticket);
-            allBookedTickets.insert({username, userTickets});
+            allTicketsByUser.insert({username, userTickets});
         }
         else
         {
-            allBookedTickets[username].push_back(ticket);
+            allTicketsByUser[username].push_back(ticket);
         }
+        allTicketsByID.insert({ticketID, ticket});
     }
     else
     {
         cout << "Ticket already booked!" << endl;
     }
+}
+
+void AirlineSystemManager::returnTicket(const string& ticketID)
+{
+    if (!allTicketsByID.contains(ticketID))
+    {
+        cout << "Ticket not found!" << endl;
+        return;
+    }
+    Ticket ticket = allTicketsByID[ticketID];
+    ticket.changeStatus("Returned");
+    Airplane flight = flights[getFlightID(ticket.getFlightNo(), ticket.getDate())];
+    flight.removeTicket(ticket);
+    allTicketsByID.erase(ticketID);
+    cout << "Confirmed refund " << ticket.getPrice() << " for " << ticket.getUsername() << endl;
+}
+
+void AirlineSystemManager::viewTicket(const string& ticketID)
+{
+    if (!allTicketsByID.contains(ticketID))
+    {
+        cout << "Ticket not found!" << endl;
+        return;
+    }
+    Ticket ticket = allTicketsByID[ticketID];
+    cout << "Flight " << ticket.getFlightNo() << ", " << ticket.getDate() << ", seat " << ticket.getSeat() << ", price "
+        << ticket.getPrice() << ", " << ticket.getUsername() << endl;
+}
+
+void AirlineSystemManager::viewUser(const string& username)
+{
+    if (!allTicketsByUser.contains(username))
+    {
+        cout << "Ticket not found!" << endl;
+        return;
+    }
+    vector<Ticket> tickets = allTicketsByUser[username];
+    for (int i = 0; i < tickets.size(); i++)
+    {
+        cout << i + 1 << ". Flight " << tickets[i].getFlightNo() << ", " << tickets[i].getDate() << ", seat " << tickets
+            [i].getSeat() << ", price "
+            << tickets[i].getPrice() << endl;
+    }
+}
+
+void AirlineSystemManager::viewFlight(const string& date, const string& flightNo)
+{
+    string uid = getFlightID(flightNo, date);
+    if (!flights.contains(uid))
+    {
+        cout << "Flight not found!" << endl;
+        return;
+    }
+    Airplane flight = flights[uid];
+    flight.showBookedSeats();
 }

@@ -19,6 +19,8 @@ public:
     Airplane(const string&, const string&, int, int, const vector<int>&);
     void availableSeats();
     void addTicket(Ticket&);
+    void removeTicket(Ticket&);
+    void showBookedSeats();
     int getPrice(const int&);
     bool isSeatBooked(const string&);
 };

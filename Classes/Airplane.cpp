@@ -26,7 +26,7 @@ void Airplane::availableSeats()
         {
             if (bookedTickets.empty() || !bookedTickets.contains(to_string(i) + seats[j]))
             {
-                cout << i << seats[j] << " " << pricingInfo[i] << "$ ";
+                cout << i << seats[j] << " " << pricingInfo[i - 1] << "$ ";
             }
         }
     }
@@ -37,6 +37,11 @@ void Airplane::addTicket(Ticket& ticket)
     bookedTickets.insert({ticket.getSeat(), ticket});
 }
 
+void Airplane::removeTicket(Ticket& ticket)
+{
+    bookedTickets.erase(ticket.getSeat());
+}
+
 bool Airplane::isSeatBooked(const string& place)
 {
     return bookedTickets.contains(place);
@@ -45,4 +50,12 @@ bool Airplane::isSeatBooked(const string& place)
 int Airplane::getPrice(const int& row)
 {
     return pricingInfo[row];
+}
+
+void Airplane::showBookedSeats()
+{
+    for (auto& [seat, ticket] : bookedTickets)
+    {
+        cout << seat << " " << ticket.getUsername() << " " << ticket.getPrice() << endl;
+    }
 }

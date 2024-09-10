@@ -6,12 +6,19 @@ class Ticket
 {
     const string id;
     const string username;
+    const string flightNo;
+    const string date;
     const string seat;
     const string price;
     string bookingStatus;
 
 public:
-    Ticket(const string&, const string&, const string&, const string&, const string&);
+    Ticket();
+    Ticket(const string&, const string&, const string&, const string&, const string&, const string&, const string&);
     string getSeat();
+    string getDate();
+    string getFlightNo();
+    string getPrice();
+    string getUsername();
     void changeStatus(const string&);
 };

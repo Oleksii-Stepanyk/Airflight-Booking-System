@@ -9,6 +9,6 @@ class FileHandler
 public:
     vector<tuple<string, string, int, int, vector<int>>> getConfig();
     string readFile(const string&);
-    vector<int> parseInfo(const vector<string>&, int&);
+    vector<int> parseInfo(string&, int&);
     vector<tuple<string, string, int, int, vector<int>>> parseArguments(const string&);
 };

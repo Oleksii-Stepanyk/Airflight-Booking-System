@@ -5,6 +5,7 @@
 #include <ranges>
 #include <sstream>
 #include <direct.h>
+#include <numeric>
 
 vector<tuple<string, string, int, int, vector<int>>> FileHandler::getConfig()
 {
@@ -37,46 +38,47 @@ vector<tuple<string, string, int, int, vector<int>>> FileHandler::parseArguments
         string date = flightInfo[0];
         string name = flightInfo[1];
         int seatsPR = stoi(flightInfo[2]);
-        flightInfo.erase(flightInfo.begin(), flightInfo.begin() + 2);
+        flightInfo.erase(flightInfo.begin(), flightInfo.begin() + 3);
+        string info;
+        for (string& s : flightInfo)
+            info += s + " ";
         int rows = 0;
-        vector<int> pricing = parseInfo(flightInfo, rows);
+        vector<int> pricing = parseInfo(info, rows);
         allFlights.push_back(make_tuple(name, date, seatsPR, rows, pricing));
     }
     return allFlights;
 }
 
-vector<int> FileHandler::parseInfo(const vector<string>& info, int& lastRow)
+vector<int> FileHandler::parseInfo(string& info, int& lastRow)
 {
     vector<int> prices;
-    for (const auto& part : info)
+    stringstream ss(info);
+    string rowPart, pricePart;
+
+    while (ss >> rowPart >> pricePart)
     {
-        stringstream ss(part);
-        string rowPart, pricePart;
-
-        while (ss >> rowPart >> pricePart)
+        int startRow, endRow;
+        if (const size_t dashPos = rowPart.find('-'); dashPos != string::npos)
         {
-            int startRow, endRow;
-            if (const size_t dashPos = rowPart.find('-'); dashPos != string::npos)
-            {
-                startRow = stoi(rowPart.substr(0, dashPos));
-                endRow = stoi(rowPart.substr(dashPos + 1));
-            }
-            else
-            {
-                startRow = endRow = stoi(rowPart);
-            }
+            startRow = stoi(rowPart.substr(0, dashPos));
+            endRow = stoi(rowPart.substr(dashPos + 1));
+        }
+        else
+        {
+            startRow = endRow = stoi(rowPart);
+        }
 
-            lastRow = max(lastRow, endRow);
+        lastRow = max(lastRow, endRow);
 
-            pricePart.pop_back();
-            int price = std::stoi(pricePart);
+        pricePart.pop_back();
+        int price = stoi(pricePart);
 
-            for (int i = startRow; i <= endRow; ++i)
-            {
-                prices[i] = price;
-            }
+        for (int i = startRow; i <= endRow; ++i)
+        {
+            prices.push_back(price);
         }
     }
+
     prices.resize(lastRow + 1);
     return prices;
 }

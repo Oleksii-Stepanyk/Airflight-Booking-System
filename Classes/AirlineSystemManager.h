@@ -10,7 +10,8 @@ class AirlineSystemManager
 {
     FileHandler fileHandler;
     map<string, Airplane> flights;
-    map<string, vector<Ticket>> allBookedTickets;
+    map<string, vector<Ticket>> allTicketsByUser;
+    map<string, Ticket> allTicketsByID;
     int lastTicketID = 10099;
 
 public:
