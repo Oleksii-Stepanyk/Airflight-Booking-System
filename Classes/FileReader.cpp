@@ -3,10 +3,6 @@
 FileReader::FileReader(const string* filename)
 {
     file = fopen(filename->c_str(), "r");
-    if (file == nullptr)
-    {
-        throw "File not found";
-    }
 }
 
 string FileReader::getData()

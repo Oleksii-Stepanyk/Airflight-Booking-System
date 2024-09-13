@@ -1,8 +1,9 @@
 #pragma once
+#include "Airplane.h"
+#include "Ticket.h"
 #include <string>
 #include <vector>
 #include <map>
-#include "Airplane.h"
 using namespace std;
 
 class AirlineSystemManager

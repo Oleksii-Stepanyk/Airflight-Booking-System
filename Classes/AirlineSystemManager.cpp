@@ -54,7 +54,7 @@ void AirlineSystemManager::parseCommand(const string& command)
     }
     else if (action == "check" && args.size() == 3)
     {
-        checkSeats(Text::to_upper(args[1]), args[2]);
+        checkSeats(args[1], Text::to_upper(args[2]));
     }
     else if (action == "book" && args.size() == 5)
     {
@@ -89,7 +89,7 @@ void AirlineSystemManager::parseCommand(const string& command)
     }
 }
 
-void AirlineSystemManager::checkSeats(const string& name, const string& date)
+void AirlineSystemManager::checkSeats(const string& date, const string& name)
 {
     const string& uid = getFlightID(name, date);
     if (!allFlights.contains(uid))

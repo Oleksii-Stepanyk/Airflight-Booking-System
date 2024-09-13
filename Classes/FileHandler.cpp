@@ -8,20 +8,21 @@
 vector<tuple<string, string, int, int, vector<int>>> FileHandler::getConfig()
 {
     cout << "Enter file with configuration to read: ";
-    string filename;
-    cin >> filename;
-    const string args = readFile(filename);
-    cout << "File read successfully!" << endl;
-    auto flights = parseArguments(args);
-    return flights;
-}
-
-string FileHandler::readFile(const string& fileName)
-{
+    string fileName;
+    cin >> fileName;
     _chdir("..");
-    FileReader fileReader(&fileName);
-    string fileContent = fileReader.getData();
-    return fileContent;
+    auto fileReader = new FileReader(&fileName);
+    while (!fileReader->isOpen())
+    {
+        cout << "File not found! Enter file with configuration to read: ";
+        cin >> fileName;
+        delete fileReader;
+        fileReader = new FileReader(&fileName);
+    }
+    const string fileContent = fileReader->getData();
+    cout << "File read successfully!" << endl;
+    auto flights = parseArguments(fileContent);
+    return flights;
 }
 
 vector<tuple<string, string, int, int, vector<int>>> FileHandler::parseArguments(const string& args)
@@ -49,6 +50,7 @@ vector<int> FileHandler::parseRows(const string& info, int& lastRow)
     vector<int> prices;
     stringstream ss(info);
     string rowPart, pricePart;
+    prices.push_back(0); // For row 0
 
     while (ss >> rowPart >> pricePart)
     {
@@ -67,7 +69,6 @@ vector<int> FileHandler::parseRows(const string& info, int& lastRow)
 
         pricePart.pop_back();
         int price = stoi(pricePart);
-
         for (int i = startRow; i <= endRow; ++i)
         {
             prices.push_back(price);

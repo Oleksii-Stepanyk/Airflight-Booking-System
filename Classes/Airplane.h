@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <map>
-#include "Ticket.h"
 using namespace std;
 
 class Airplane

@@ -9,4 +9,5 @@ public:
     FileReader(const string*);
     ~FileReader();
     string getData();
+    bool isOpen() const { return file != nullptr; }
 };

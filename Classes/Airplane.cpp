@@ -26,9 +26,10 @@ void Airplane::availableSeats()
         {
             if (bookedSeats.empty() || ranges::find(bookedSeats, to_string(i) + seats[j]) == bookedSeats.end())
             {
-                cout << i << seats[j] << " " << pricingInfo[i - 1] << "$ ";
+                cout << i << seats[j] << " " << pricingInfo[i] << "$ ";
             }
         }
+        cout << endl;
     }
 }
 
