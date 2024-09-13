@@ -14,7 +14,7 @@ class Ticket
 
 public:
     Ticket();
-    Ticket(const string&, const string&, const string&, const string&, const string&, const string&, const string&);
+    Ticket(string*, const string*, const string*, const string*, const string*, const string*, string*);
     string getSeat();
     string getDate();
     string getFlightNo();

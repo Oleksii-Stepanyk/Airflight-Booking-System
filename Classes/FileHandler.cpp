@@ -1,11 +1,9 @@
 #include "FileHandler.h"
+#include "FileReader.h"
 #include "Text.h"
 #include <iostream>
-#include <fstream>
-#include <ranges>
 #include <sstream>
 #include <direct.h>
-#include <numeric>
 
 vector<tuple<string, string, int, int, vector<int>>> FileHandler::getConfig()
 {
@@ -21,11 +19,8 @@ vector<tuple<string, string, int, int, vector<int>>> FileHandler::getConfig()
 string FileHandler::readFile(const string& fileName)
 {
     _chdir("..");
-    fstream file(fileName);
-    string fileContent, line;
-    while (getline(file, line))
-        fileContent += line + "\n";
-    file.close();
+    FileReader fileReader(&fileName);
+    string fileContent = fileReader.getData();
     return fileContent;
 }
 
@@ -43,13 +38,13 @@ vector<tuple<string, string, int, int, vector<int>>> FileHandler::parseArguments
         for (string& s : flightInfo)
             info += s + " ";
         int rows = 0;
-        vector<int> pricing = parseInfo(info, rows);
-        allFlights.push_back(make_tuple(name, date, seatsPR, rows, pricing));
+        vector<int> pricing = parseRows(info, rows);
+        allFlights.emplace_back(name, date, seatsPR, rows, pricing);
     }
     return allFlights;
 }
 
-vector<int> FileHandler::parseInfo(string& info, int& lastRow)
+vector<int> FileHandler::parseRows(const string& info, int& lastRow)
 {
     vector<int> prices;
     stringstream ss(info);

@@ -12,15 +12,15 @@ class Airplane
     const int seatsPerRow;
     const int rows;
     const vector<int> pricingInfo;
-    map<string, Ticket> bookedTickets;
+    vector<string> bookedSeats;
 
 public:
     Airplane();
-    Airplane(const string&, const string&, int, int, const vector<int>&);
+    Airplane(string*, string*, int*, int*, vector<int>*);
     void availableSeats();
-    void addTicket(Ticket&);
-    void removeTicket(Ticket&);
-    void showBookedSeats();
+    void addSeat(const string&);
+    void removeSeat(const string&);
+    vector<string> getBookedSeats();
     int getPrice(const int&);
     bool isSeatBooked(const string&);
 };

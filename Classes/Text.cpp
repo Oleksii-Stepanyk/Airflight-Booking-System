@@ -12,3 +12,23 @@ vector<string> Text::split(const string& str, const char& delimiter)
     }
     return result;
 }
+
+string Text::to_lower(const string& str)
+{
+    string result = str;
+    for (char& c : result)
+    {
+        c += 32 * (c >= 'A' && c <= 'Z');
+    }
+    return result;
+}
+
+string Text::to_upper(const string& str)
+{
+    string result = str;
+    for (char& c : result)
+    {
+        c = c - 32 * (c >= 'a' && c <= 'z');
+    }
+    return result;
+}

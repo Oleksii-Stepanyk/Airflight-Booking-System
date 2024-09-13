@@ -13,4 +13,6 @@ add_executable(Airflight_Booking_System main.cpp
         Classes/FileHandler.cpp
         Classes/FileHandler.h
         Classes/Text.cpp
-        Classes/Text.h)
+        Classes/Text.h
+        Classes/FileReader.cpp
+        Classes/FileReader.h)

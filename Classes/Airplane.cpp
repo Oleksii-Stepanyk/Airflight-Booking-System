@@ -3,13 +3,13 @@
 #include <algorithm>
 #include <iostream>
 
-Airplane::Airplane(const string& planeName, const string& flightDate, int seatsPR, int totalRows,
-                   const vector<int>& pricing)
-    : name(planeName), date(flightDate), seatsPerRow(seatsPR), rows(totalRows), pricingInfo(pricing)
+Airplane::Airplane(string* planeName, string* flightDate, int* seatsPR, int* totalRows,
+                   vector<int>* pricing)
+    : name(*planeName), date(*flightDate), seatsPerRow(*seatsPR), rows(*totalRows), pricingInfo(*pricing)
 {
 }
 
-Airplane::Airplane() : name(""), date(""), seatsPerRow(0), rows(0), pricingInfo({})
+Airplane::Airplane() : seatsPerRow(0), rows(0), pricingInfo({})
 {
 }
 
@@ -24,7 +24,7 @@ void Airplane::availableSeats()
     {
         for (int j = 1; j <= seatsPerRow; j++)
         {
-            if (bookedTickets.empty() || !bookedTickets.contains(to_string(i) + seats[j]))
+            if (bookedSeats.empty() || ranges::find(bookedSeats, to_string(i) + seats[j]) == bookedSeats.end())
             {
                 cout << i << seats[j] << " " << pricingInfo[i - 1] << "$ ";
             }
@@ -32,19 +32,19 @@ void Airplane::availableSeats()
     }
 }
 
-void Airplane::addTicket(Ticket& ticket)
+void Airplane::addSeat(const string& seat)
 {
-    bookedTickets.insert({ticket.getSeat(), ticket});
+    bookedSeats.push_back(seat);
 }
 
-void Airplane::removeTicket(Ticket& ticket)
+void Airplane::removeSeat(const string& seat)
 {
-    bookedTickets.erase(ticket.getSeat());
+    bookedSeats.erase(ranges::find(bookedSeats, seat));
 }
 
 bool Airplane::isSeatBooked(const string& place)
 {
-    return bookedTickets.contains(place);
+    return ranges::find(bookedSeats, place) != bookedSeats.end();
 }
 
 int Airplane::getPrice(const int& row)
@@ -52,10 +52,7 @@ int Airplane::getPrice(const int& row)
     return pricingInfo[row];
 }
 
-void Airplane::showBookedSeats()
+vector<string> Airplane::getBookedSeats()
 {
-    for (auto& [seat, ticket] : bookedTickets)
-    {
-        cout << seat << " " << ticket.getUsername() << " " << ticket.getPrice() << endl;
-    }
+    return bookedSeats;
 }

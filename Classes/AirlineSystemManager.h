@@ -3,15 +3,12 @@
 #include <vector>
 #include <map>
 #include "Airplane.h"
-#include "FileHandler.h"
 using namespace std;
 
 class AirlineSystemManager
 {
-    FileHandler fileHandler;
-    map<string, Airplane> flights;
-    map<string, vector<Ticket>> allTicketsByUser;
-    map<string, Ticket> allTicketsByID;
+    map<string, Airplane> allFlights;
+    map<string, Ticket> allTickets;
     int lastTicketID = 10099;
 
 public:

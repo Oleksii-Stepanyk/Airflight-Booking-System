@@ -7,8 +7,8 @@ using namespace std;
 class FileHandler
 {
 public:
-    vector<tuple<string, string, int, int, vector<int>>> getConfig();
-    string readFile(const string&);
-    vector<int> parseInfo(string&, int&);
-    vector<tuple<string, string, int, int, vector<int>>> parseArguments(const string&);
+    static vector<tuple<string, string, int, int, vector<int>>> getConfig();
+    static string readFile(const string&);
+    static vector<int> parseRows(const string&, int&);
+    static vector<tuple<string, string, int, int, vector<int>>> parseArguments(const string&);
 };
